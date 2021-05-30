@@ -20,45 +20,46 @@ function App() {
   const [loggedInUser, setLoggedInUser] = useState('')
 
   const [halData, setHalData] = useState({})
-
   
+
+
   // console.log(halData)
   return (
     <div className="App">
-    <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
-      <UserContext.Provider value={[halData, setHalData]}>
-        <p>Email: {loggedInUser.email}</p>
-        <Router>
+      <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
+        <UserContext.Provider value={[halData, setHalData]}>
+          <p>Email: {loggedInUser.email}</p>
+          <Router>
 
-          <Navbar />
-          <h2>Welcome to KUET Hall Management Website</h2>
-          <Switch>
-            {/* <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
+            <Navbar />
+            <h2>Welcome to KUET Hall Management Website</h2>
+            <Switch>
+              {/* <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
             <UserContext.Provider value={[halData, setHalData]}> */}
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/hal">
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route path="/hal">
 
-              <Hall />
-            </Route>
-            <PrivateRoute path="/form/:name">
-              <Form />
-            </PrivateRoute>
-            {/* <PrivateR path="/form/:name">
+                <Hall />
+              </Route>
+              <PrivateRoute path="/form/:name">
+                <Form />
+              </PrivateRoute>
+              {/* <PrivateR path="/form/:name">
                 <Form />
               </PrivateR> */}
-            <Route path="/login">
-              <Login />
-            </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
 
-            {/* </UserContext.Provider >
+              {/* </UserContext.Provider >
           </UserContext.Provider > */}
-          </Switch>
-        </Router>
+            </Switch>
+          </Router>
 
+        </UserContext.Provider >
       </UserContext.Provider >
-    </UserContext.Provider >
     </div>
   );
 }

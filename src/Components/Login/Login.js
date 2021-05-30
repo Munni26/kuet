@@ -1,14 +1,11 @@
 import React, { useContext, useState } from 'react';
-import firebase from "firebase/app";
-import "firebase/auth";
-import firebaseConfig from './firebaseConfig';
 import { UserContext } from '../../App';
-
-firebase.initializeApp(firebaseConfig);
+import { useHistory, useLocation } from 'react-router';
+import { createUserWithEmailAndPassword, handleGoogleSignUp, initializeLoginFramework, signInWithEmailAndPassword } from './loginManager';
 
 
 const Login = () => {
-    const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+
 
     const [newUser, setNewUser] = useState(false)
     const [user, setUser] = useState({
@@ -21,24 +18,23 @@ const Login = () => {
 
     });
 
-    const handleGoggleSignUp = () => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth()
-            .signInWithPopup(provider)
-            .then((result) => {
+    initializeLoginFramework();
 
-                var user = result.user;
-                const { displayName, email } = user;
-                const SignedInUser = {
-                    isSignedIn: true,
-                    name: displayName,
-                    email: email
-                }
 
-                setLoggedInUser(SignedInUser)
+    const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+    const history = useHistory();
+    const location = useLocation();
+    let { from } = location.state || { from: { pathname: "/" } };
 
+    const googleSignUp = () => {
+        handleGoogleSignUp()
+            .then(res => {
+                setUser(res);
+                setLoggedInUser(res);
+                history.replace(from);
             })
     }
+
     const handleChange = (e) => {
         // console.log(e.target.name, e.target.value)
         let fieldValid = true;
@@ -59,56 +55,24 @@ const Login = () => {
     const handleSubmit = (e) => {
         //console.log(user.email, user.password)
         if (newUser && user.email && user.password) {
-
-            firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+            createUserWithEmailAndPassword(user.name, user.email, user.password)
                 .then(res => {
-                    // Signed in 
-                    const newUser = { ...user };
-                    newUser.error = '';
-                    newUser.success = true;
-                    setUser(newUser);
-                    updateUserName(user.name);
+                    setUser(res);
+                    setLoggedInUser(res);
+                    history.replace(from);
                 })
-                .catch((error) => {
-                    const newUser = { ...user };
-                    newUser.error = error.message;
-                    newUser.success = false;
-                    setUser(newUser);
-                });
+
         }
 
         if (!newUser && user.email && user.password) {
-            firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+            signInWithEmailAndPassword(user.email, user.password)
                 .then(res => {
-                    // Signed in
-                    const newUser = { ...user };
-                    newUser.error = '';
-                    newUser.success = true;
-                    setUser(newUser);
-                    setLoggedInUser(newUser);
-                    console.log('sign in user info', res.user);
-
+                    setUser(res);
+                    setLoggedInUser(res);
+                    history.replace(from);
                 })
-                .catch((error) => {
-                    const newUser = { ...user };
-                    newUser.error = error.message;
-                    newUser.success = false;
-                    setUser(newUser);
-                });
         }
         e.preventDefault();
-    }
-
-    const updateUserName = name => {
-        const user = firebase.auth().currentUser;
-
-        user.updateProfile({
-            displayName: name
-        }).then(function () {
-            console.log('user name updated successfully')
-        }).catch(function (error) {
-            console.log(error)
-        });
     }
 
     return (
@@ -138,7 +102,7 @@ const Login = () => {
             </div>
 
             <p>--------------------OR--------------------</p>
-            <button className="btn btn-outline-warning" onClick={handleGoggleSignUp}>Sign Up With Goggle</button>
+            <button className="btn btn-outline-warning" onClick={googleSignUp}>Sign Up With Goggle</button>
 
         </div>
     );

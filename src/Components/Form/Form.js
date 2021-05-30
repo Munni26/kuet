@@ -7,7 +7,7 @@ import { UserContext } from '../../App';
 const Form = () => {
 
     const [halData, setHalData] = useContext(UserContext);
-
+    
     const [bio, setBio] = useState({
         name: '',
         email: '',
@@ -45,8 +45,8 @@ const Form = () => {
 
 
                 </div>
-                <div className="col-md-6"
-                >
+                <div className="col-md-6">
+                
                     <form onSubmit={handleSubmit}>
                         <input onChange={handleChange} name="name" className="form-control" type="text" placeholder="Enter Your Name" />
                         <br />
@@ -56,17 +56,22 @@ const Form = () => {
 
                         <input onChange={() => handleChange} name="dept" className="form-control" type="text" placeholder="Enter Your Department" />
                         <br />
+
                         <input onChange={() => handleChange} name="roll" className="form-control" type="number" placeholder="Enter Roll" />
                         <br />
+
                         <input onChange={() => handleChange} name="fatherName" className="form-control" type="text" placeholder="Enter Father's Name" />
                         <br />
 
                         <input onChange={() => handleChange} name="motherName" className="form-control" type="text" placeholder="Enter Mother's Name" />
                         <br />
+
                         <input onChange={() => handleChange} name="semester" className="form-control" type="text" placeholder="Enter  your year and semester" />
                         <br />
+
                         <input onChange={() => handleChange} name="cg" className="form-control" type="number" placeholder="Enter CG " />
                         <br />
+                        
                         <button className="btn btn-success form-control">Submit</button>
                     </form>
 
